@@ -3,8 +3,13 @@ class User < ApplicationRecord
     validates :password_digest, presence: true
     validates :session_token, presence: true, uniqueness: true
     after_initialize :ensure_session_token
+    validates :password, length: {minimum: 6, allow_nil: true}
 
     attr_reader :password
+
+    has_many :cats,
+    foreign_key: :user_id,
+    class_name: :Cat
 
     def self.generate_session_token
         SecureRandom::urlsafe_base64
